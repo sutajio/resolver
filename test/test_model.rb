@@ -3,6 +3,7 @@ require 'active_model'
 class TestModel
   extend ActiveModel::Callbacks
   include ActiveModel::Dirty
+  include ActiveModel::AttributeMethods
 
   define_model_callbacks :create, :update, :destroy, :save
 
@@ -19,12 +20,18 @@ class TestModel
     @id
   end
 
+  def attribute(name)
+    if @attributes.keys.include?(name.to_sym)
+      @attributes[name.to_sym]
+    end
+  end
+
   def method_missing(sym, *args, &block)
-     if @attributes.keys.include?(sym)
-       @attributes[sym]
-     else
-       super
-     end
+    if @attributes.keys.include?(sym)
+      @attributes[sym]
+    else
+      super
+    end
   end
 
   def <=>(other)
