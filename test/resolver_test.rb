@@ -17,6 +17,15 @@ class ResolverTest < Test::Unit::TestCase
     assert_equal 'namespace', Resolver.redis.namespace
   end
 
+  def test_index_name
+    TestModel.key(:example_1)
+    TestModel.key(:example_2, :unique => true)
+    TestModel.key(:example_3, :global => true)
+    assert_equal 'TestModel:example_1:foo', TestModel.send(:index_name, :example_1, 'foo')
+    assert_equal 'TestModel:example_2:foo', TestModel.send(:index_name, :example_2, 'foo')
+    assert_equal 'example_3:foo', TestModel.send(:index_name, :example_3, 'foo')
+  end
+
   def test_key
     TestModel.key(:example)
     TestModel.create('one', :example => 'foo')

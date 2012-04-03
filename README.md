@@ -29,7 +29,7 @@ class Post < ActiveRecord::Base
   include Resolver::Key
 
   key :category
-  key :slug, :unique => true
+  key :slug, :unique => true, :global => true
 
 end
 
@@ -39,6 +39,8 @@ Post.find_by(:slug, 'example-post')
 Post.exists_with?(:slug, 'example-post') # => true
 Post.count_with(:category, 'News') # => 1
 ```
+
+The ```:global => true``` option means that the key globally namespaced and is shared by all models. If global is set to false the key is instead namespaced based on the name of the model class.
 
 Development
 -----------

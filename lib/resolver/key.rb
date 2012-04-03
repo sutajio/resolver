@@ -48,7 +48,12 @@ module Resolver
       end
 
       def index_name(name, value)
-        "#{self.class.to_s}:#{name}:#{value}"
+        options = @resolver_keys[name.to_sym]
+        if options[:global]
+          "#{name}:#{value}"
+        else
+          "#{self.to_s}:#{name}:#{value}"
+        end
       end
 
       def write_index(key, object, options)
